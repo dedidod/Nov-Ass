@@ -1,0 +1,128 @@
+import java.util.Scanner;
+
+import javax.swing.*;
+
+public class NovAss {
+
+	public static void main(String[] args) {
+		boolean ballot = true;
+		int rank = 0;
+		int ballotnumber = 1;
+		int winc = 0;
+		boolean tie = false;
+		int tiebr1 = 0;
+		int tiebr2 = 0;
+		int wincand = 0;
+		int tienum = 0;
+
+		int Nocand = Integer.parseInt(JOptionPane
+				.showInputDialog("how many candidates?"));
+
+		String[] candidates;
+		candidates = new String[Nocand];
+
+		int[] score;
+		score = new int[Nocand];
+
+		int[][] preference;
+		preference = new int[Nocand][4];
+
+		// input names of the candidates standing for school council election
+		int can = 1;
+		for (int i = 0; i < Nocand; i++) {
+			candidates[i] = JOptionPane.showInputDialog("Enter number " + can
+					+ " candidates name ");
+			can++;
+		}
+
+		// input the preference from the ballot papers
+		while (ballot) {
+
+			for (int d = 0; d < Nocand; d++) {
+				rank = Integer.parseInt(JOptionPane.showInputDialog("Ballot "
+						+ ballotnumber + ", From 1 - " + Nocand
+						+ " for candidate: " + candidates[d]));
+				score[d] += rank;
+
+				if (rank == 1) {
+					preference[d][0]++;
+				}
+				if (rank == 2) {
+					preference[d][1]++;
+				}
+				if (rank == 3) {
+					preference[d][2]++;
+				}
+				if (rank == 4) {
+					preference[d][3]++;
+				}
+				if (rank == 5) {
+					preference[d][4]++;
+				}
+				/////up to 5 tie-breaks/////
+
+			}
+			// finshing ballot
+			if (JOptionPane.showConfirmDialog(null, "Next Ballot?", ":D",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+				JOptionPane.showConfirmDialog(null,
+						"You have finished the ballot");
+				ballot = false;
+			}
+
+			ballotnumber++;
+		}
+		// display the outcome of the election
+		for (int show = 0; show < Nocand; show++) {
+			System.out.println(candidates[show] + ", score is: " + score[show]);
+		}
+
+		// determine winner checker
+		for (int wincheck1 = 0; wincheck1 < Nocand; wincheck1++) {
+			for (int wincheck2 = 0; wincheck2 < Nocand; wincheck2++) {
+				if (score[wincheck1] < score[wincheck2]) {
+					winc++;
+				}
+				if (score[wincheck1] == score[wincheck2]
+						&& wincheck1 != wincheck2) {
+					tie = true;
+
+					tiebr1 = wincheck1;
+					tiebr2 = wincheck2;
+					
+					tienum++;
+				}
+			}
+
+			// single tie
+			if (tie && tienum == 1) {
+				JOptionPane.showMessageDialog(null, "We have a tie!");
+				if (preference[tiebr1][0] > preference[tiebr2][0]) {
+					System.out.println(candidates[tiebr1]
+							+ " is the winner, with a score of : "
+							+ score[tiebr1]);
+					wincheck1 = Nocand;
+
+				} else {
+					System.out.println(candidates[tiebr2]
+							+ " is the winner, with a score of : "
+							+ score[tiebr2]);
+					wincheck1 = Nocand;
+				}
+			}
+
+			////// double tie... (OFT)//////
+
+			// no tie
+			if (winc >= 3) {
+				System.out.println(candidates[wincheck1]
+						+ " is the winner, with a score of : "
+						+ score[wincheck1]);
+				wincheck1 = Nocand;
+			}
+		}
+		JOptionPane.showMessageDialog(null,
+				"thank you for using my ballot program");
+		// end of ballot program.....
+	}
+}
